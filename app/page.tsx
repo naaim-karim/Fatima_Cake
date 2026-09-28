@@ -1,94 +1,202 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Heart, Star, Users } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { menuItems, categoryName } from "@/lib/menu-data";
+
+const collections = [
+  {
+    id: "cake",
+    name: "Cakes",
+    note: "The centre of the celebration",
+    image: "/images/red-velvet.png",
+  },
+  {
+    id: "cupcake",
+    name: "Cupcakes",
+    note: "Little cakes, lovely moments",
+    image: "/images/strawberry-cupcakes.png",
+  },
+  {
+    id: "pudding",
+    name: "Puddings",
+    note: "Something soft & spoonable",
+    image: "/images/chocolate-pudding.png",
+  },
+  {
+    id: "donuts",
+    name: "Donuts",
+    note: "A sweet little pick-me-up",
+    image: "/images/glazed-donuts.png",
+  },
+];
 
 export default function HomePage() {
+  const featured = [menuItems[0], menuItems[4], menuItems[5]];
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-pink-50 to-orange-50 py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Welcome to <span className="text-pink-600">Fatima Cake</span>
+    <>
+      <section className="cake-hero bakery-wrap">
+        <div className="hero-copy">
+          <p className="eyebrow">FATIMA CAKE · CAKES & LITTLE TREATS</p>
+          <h1>
+            A little sweetness.
+            <br />
+            <em>A lovely occasion.</em>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Delicious homemade cakes, cupcakes, puddings, and donuts made with
-            love and the finest ingredients. Every bite tells a story of passion
-            and tradition.
+          <p className="hero-description">
+            For the candles, the catch-ups, and the just-because. Find your
+            cake, or a little something sweet, at Fatima Cake.
           </p>
-          <Link href="/menu">
-            <Button
-              size="lg"
-              className="bg-pink-600 hover:bg-pink-700 text-lg px-8 py-3"
-            >
-              View Our Menu
-            </Button>
-          </Link>
+          <div className="hero-actions">
+            <Link href="/menu" className="bakery-button">
+              Explore the menu <ArrowRight size={18} />
+            </Link>
+            <a href="#collections" className="simple-link">
+              Find your favourite <ArrowUpRight size={17} />
+            </a>
+          </div>
+          <p className="hero-footnote">Cakes, cupcakes, puddings & donuts</p>
+        </div>
+        <div className="hero-visual">
+          <div className="hero-image">
+            <Image
+              src="/images/red-velvet.png"
+              alt="Illustrative red velvet cake with cream cheese frosting and a slice"
+              fill
+              priority
+              sizes="(max-width: 760px) 100vw, 50vw"
+            />
+          </div>
+          <span className="hero-tag">A slice of something lovely.</span>
         </div>
       </section>
-
-      {/* Features Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            Why Choose Fatima Cake?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center">
-              <CardContent className="pt-6">
-                <Heart className="w-12 h-12 text-pink-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Made with Love</h3>
-                <p className="text-gray-600">
-                  Every cake is crafted with care and attention to detail, using
-                  traditional recipes passed down through generations.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center">
-              <CardContent className="pt-6">
-                <Star className="w-12 h-12 text-pink-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Premium Quality</h3>
-                <p className="text-gray-600">
-                  We use only the finest ingredients to ensure every bite is a
-                  delightful experience you'll remember.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center">
-              <CardContent className="pt-6">
-                <Users className="w-12 h-12 text-pink-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Family Tradition</h3>
-                <p className="text-gray-600">
-                  A family business dedicated to bringing joy and sweetness to
-                  your special moments and everyday celebrations.
-                </p>
-              </CardContent>
-            </Card>
+      <div className="bakery-ribbon">
+        <span>For big celebrations</span>
+        <span aria-hidden="true">✳</span>
+        <span>And little everyday joys</span>
+        <span aria-hidden="true">✳</span>
+        <span>Find your sweet spot</span>
+      </div>
+      <section id="collections" className="collections-section bakery-wrap">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">THE SWEET LINE-UP</p>
+            <h2>What are you craving?</h2>
+          </div>
+          <Link href="/menu" className="simple-link">
+            See the full menu <ArrowUpRight size={18} />
+          </Link>
+        </div>
+        <div className="collection-grid">
+          {collections.map((c) => (
+            <Link
+              key={c.id}
+              href={`/menu?category=${c.id}`}
+              className="collection-card"
+            >
+              <div className="collection-photo">
+                <Image
+                  src={c.image}
+                  alt={`Illustrative ${c.name.toLowerCase()}`}
+                  fill
+                  sizes="(max-width: 600px) 45vw, 25vw"
+                />
+              </div>
+              <div className="collection-title">
+                <h3>{c.name}</h3>
+                <ArrowUpRight size={20} />
+              </div>
+              <p>{c.note}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+      <section className="featured-section">
+        <div className="bakery-wrap">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">A FEW TO GET YOU STARTED</p>
+              <h2>Meet your next sweet treat.</h2>
+            </div>
+            <p>
+              Chocolate, berries, buttercream.
+              <br />
+              There’s a little something for every mood.
+            </p>
+          </div>
+          <div className="featured-grid">
+            {featured.map((item) => (
+              <Link
+                href={`/menu/${item.id}`}
+                key={item.id}
+                className="dessert-card"
+              >
+                <div className="dessert-photo">
+                  <Image
+                    src={item.image}
+                    alt={`Illustrative ${item.name}`}
+                    fill
+                    sizes="(max-width: 600px) 100vw, 33vw"
+                  />
+                </div>
+                <div className="dessert-meta">
+                  <span>{categoryName(item.category)}</span>
+                  <span>${item.price}</span>
+                </div>
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
+                <span className="dessert-link">
+                  Take a closer look <ArrowUpRight size={16} />
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="bg-pink-600 py-16 text-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Taste Heaven?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Explore our delicious menu and find your perfect sweet treat today!
+      <section id="how-to-order" className="order-section bakery-wrap">
+        <div>
+          <p className="eyebrow">FROM YOUR SCREEN TO YOUR CELEBRATION</p>
+          <h2>
+            Pick your treat.
+            <br />
+            <em>Let’s talk cake.</em>
+          </h2>
+          <p>
+            Choose something from the menu, then message us to discuss your
+            order and confirm availability.
           </p>
-          <Link href="/menu">
-            <Button
-              size="lg"
-              variant="outline"
-              className="bg-white text-pink-600 hover:bg-gray-100 border-white"
-            >
-              Browse Menu
-            </Button>
-          </Link>
+          <a
+            href="https://wa.me/905528535323"
+            className="bakery-button"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Enquire on WhatsApp <ArrowUpRight size={18} />
+          </a>
         </div>
+        <ol className="order-steps">
+          <li>
+            <span>01</span>
+            <div>
+              <h3>Find your favourite</h3>
+              <p>Browse the flavours, ingredients, and prices.</p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>Tell us what you have in mind</h3>
+              <p>Send your chosen treat, occasion, date, and any requests.</p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>Confirm the details</h3>
+              <p>We’ll discuss availability and the arrangements with you.</p>
+            </div>
+          </li>
+        </ol>
       </section>
-    </div>
+    </>
   );
 }

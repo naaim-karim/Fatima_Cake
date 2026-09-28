@@ -1,96 +1,73 @@
-"use client";
-
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, MessageCircle } from "lucide-react";
-import { menuItems } from "@/lib/menu-data";
+import { ArrowLeft, ArrowUpRight, Check } from "lucide-react";
+import { menuItems, categoryName } from "@/lib/menu-data";
 
-interface PageProps {
+export default async function ItemDetailPage({
+  params,
+}: {
   params: Promise<{ id: string }>;
-}
-
-export default async function ItemDetailPage({ params }: PageProps) {
+}) {
   const { id } = await params;
-  const item = menuItems.find((item) => item.id === id);
-
-  if (!item) {
-    notFound();
-  }
-
-  const handleOrder = () => {
-    const message = `Hi! I'd like to order ${item.name}. Could you please provide more details about availability and pricing?`;
-    window.open(
-      `https://wa.me/+905528535323?text=${encodeURIComponent(message)}`,
-      "_blank"
-    );
-  };
-
+  const item = menuItems.find((i) => i.id === id);
+  if (!item) notFound();
+  const message = `Hi! I'd like to order ${item.name}. Could you please confirm availability and pricing?`;
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Link href="/menu">
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Menu
-          </Button>
-        </Link>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Image */}
-          <div className="aspect-square relative overflow-hidden rounded-lg">
+    <section className="detail-section bakery-wrap">
+      <Link href="/menu" className="simple-link detail-back">
+        <ArrowLeft size={17} /> Back to the menu
+      </Link>
+      <div className="cake-detail-grid">
+        <figure>
+          <div className="detail-image">
             <Image
-              src={item.image || "/placeholder.svg"}
-              alt={item.name}
+              src={item.image}
+              alt={`Illustrative ${item.name}`}
               fill
-              className="object-cover"
+              priority
+              sizes="(max-width: 760px) 100vw, 50vw"
             />
           </div>
-
-          {/* Details */}
-          <div className="space-y-6">
-            <div>
-              <Badge className="mb-2 capitalize">{item.category}</Badge>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                {item.name}
-              </h1>
-              <p className="text-lg text-gray-600 mb-4">{item.description}</p>
-              {item.price && (
-                <p className="text-2xl font-bold text-pink-600">
-                  ${item.price}
-                </p>
-              )}
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Ingredients</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {item.ingredients.map((ingredient, index) => (
-                    <Badge key={index} variant="secondary">
-                      {ingredient}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Button
-              onClick={handleOrder}
-              size="lg"
-              className="w-full bg-green-600 hover:bg-green-700"
-            >
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Order via WhatsApp
-            </Button>
+          <figcaption>
+            Illustrative image · Actual appearance may vary.
+          </figcaption>
+        </figure>
+        <div className="cake-detail-copy">
+          <p className="eyebrow">{categoryName(item.category)}</p>
+          <h1>{item.name}</h1>
+          <p className="detail-description">{item.description}</p>
+          {item.price !== undefined && (
+            <p className="detail-price">
+              ${item.price}
+              <span>Confirm price & availability when ordering.</span>
+            </p>
+          )}
+          <div className="cake-ingredients">
+            <h2>What’s inside</h2>
+            <ul>
+              {item.ingredients.map((ingredient) => (
+                <li key={ingredient}>
+                  <Check size={15} />
+                  {ingredient}
+                </li>
+              ))}
+            </ul>
           </div>
+          <a
+            href={`https://wa.me/905528535323?text=${encodeURIComponent(message)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bakery-button order-button"
+          >
+            Order via WhatsApp <ArrowUpRight size={18} />
+          </a>
+          <p className="order-note">
+            Your chosen treat is included in the message. Tell us your date and
+            any requests, and we’ll confirm the details.
+          </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
